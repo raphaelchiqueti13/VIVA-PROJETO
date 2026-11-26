@@ -4,7 +4,7 @@
 import bcrypt from "bcryptjs";
 import { db } from "./db.js";
 
-if (process.env.NODE_ENV === "production") { console.error("seed:apresentacao bloqueado em produção."); process.exit(1); }
+if (process.env.NODE_ENV === "production" && process.env.ALLOW_DEMO_SEED !== "true") { console.error("seed:apresentacao bloqueado em produção."); process.exit(1); }
 
 const hcUser = db.prepare("SELECT id, hemocenter_id FROM users WHERE email='hemocentro@demo.viva'").get();
 if (!hcUser) { console.error("Rode antes: npm run seed:demo"); process.exit(1); }
