@@ -24,7 +24,7 @@ const hash = bcrypt.hashSync("Demo@12345678", 10);
 
 const insUser = db.prepare("INSERT OR IGNORE INTO users (name,email,password_hash,role,blood_type,city,region,profile_completed,created_at) VALUES (?,?,?,'donor',?,?,?,1,?)");
 const insDon = db.prepare("INSERT OR IGNORE INTO donation_records (user_id,hemocenter_id,donation_date,status,validated_at) VALUES (?,?,?,'validated',CURRENT_TIMESTAMP)");
-const insApp = db.prepare("INSERT INTO appointments (user_id,hemocenter_id,appointment_date,appointment_time,status) VALUES (?,?,?,?,?)");
+const insApp = db.prepare("INSERT OR IGNORE INTO appointments (user_id,hemocenter_id,appointment_date,appointment_time,status) VALUES (?,?,?,?,?)");
 // Registros de agendamento fictícios das contas demo são confirmados imediatamente.
 db.prepare("UPDATE appointments SET status='confirmed' WHERE status='pending' AND user_id IN (SELECT id FROM users WHERE email LIKE '%@demo.viva')").run();
 
@@ -40,7 +40,7 @@ const run = db.transaction(() => {
       let lastDate = null;
       for (let k = 0; k < n && day < 190; k++) {
         const d = fmt(daysAgo(day));
-        if (insDon.run(id, hcUser.id, d).changes) { donations++; lastDate = lastDate || d; }
+        if (insDon.run(id, unitId, d).changes) { donations++; lastDate = lastDate || d; }
         day += 70 + Math.floor(rnd() * 25);
       }
       if (lastDate) db.prepare("UPDATE users SET last_donation_date=? WHERE id=?").run(lastDate, id);
