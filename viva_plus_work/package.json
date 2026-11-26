@@ -12,6 +12,7 @@
     "test": "node --test",
     "seed:demo": "node server/seed-demo.js",
     "start:prod": "node server/index.js",
+    "start:demo": "node server/seed-demo.js && node server/seed-apresentacao.js && node server/index.js",
     "seed:apresentacao": "node server/seed-apresentacao.js",
     "demo:setup": "npm run seed:demo && npm run seed:apresentacao"
   },
