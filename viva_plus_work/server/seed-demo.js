@@ -3,7 +3,7 @@
 import bcrypt from "bcryptjs";
 import { db } from "./db.js";
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" && process.env.ALLOW_DEMO_SEED !== "true") {
   console.error("seed:demo bloqueado em produção.");
   process.exit(1);
 }
